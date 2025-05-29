@@ -37,7 +37,7 @@ def parseHomepage(html):
     soup = BeautifulSoup(html, 'html.parser')
     articles_data = []
 
-    containers = soup.select("div.entry-wrapper")
+    containers = soup.select("article.post")
 
     # Searching the title, date & time and tag for each article
 
@@ -59,7 +59,7 @@ def parseHomepage(html):
                     "tag": tag
                 })
             else:
-                print(f"Skipping article #{i}: Missing title")
+                print(f"Skipping article #{i}: Missing data")
         except Exception as e:
             print(f"Error parsing article #{i}: {e}")
 
