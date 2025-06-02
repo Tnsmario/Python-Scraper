@@ -10,6 +10,7 @@ https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 from bs4 import BeautifulSoup
 import json
+import hashlib
 
 
 # Open url using playwright
@@ -29,12 +30,18 @@ def fetchingHTML(url):
         print(f"Error during fetching: {e}")
         return None
 
+def hash_logic(title, date, tag):
+    key = f"{title.strip()}|{date.strip()}|{tag.strip()}"
+    return hashlib.md5(key.encode("utf-8")).hexdigest()
+
 # Parsing the homepage and finding all the necessary tags
 def parseHomepage(html):
     if not html:
         return []
 
     soup = BeautifulSoup(html, 'html.parser')
+
+    seen_hashes = set()
     articles_data = []
 
     containers = soup.select("article.post")
@@ -53,13 +60,16 @@ def parseHomepage(html):
             tag = tag_tag.get_text(strip=True) if tag_tag else "N/A"
 
             if title:
-                articles_data.append({
-                    "title": title,
-                    "datetime": date_time,
-                    "tag": tag
-                })
+                article_hash = hash_logic(title, date_time, tag)
+                if article_hash not in seen_hashes:
+                    seen_hashes.add(article_hash)
+                    articles_data.append({
+                        "title": title,
+                        "datetime": date_time,
+                        "tag": tag
+                    })
             else:
-                print(f"Skipping article #{i}: Missing data")
+                print(f"Duplicate skipped (#{i})")
         except Exception as e:
             print(f"Error parsing article #{i}: {e}")
 
