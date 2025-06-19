@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scraped Articles</title>
+</head>
+<body>
+    <h1>Scraped Articles</h1>
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <strong>{{ article.title }}</strong><br>
+                    {{ article.datetime }} | {{ article.tag }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No articles found.</p>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Press here to go back to Homepage</a>
+</body>
+</html>
