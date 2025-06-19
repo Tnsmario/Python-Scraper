@@ -1,7 +1,17 @@
-# created by virtualenv automatically
+#   Python
 *.db
 *.json
 __pycache__/
-.idea/
 .venv/
+*.pyd
+*.pyo
+*.pyc
+.env
+*.sqlite3
 
+#   VSCode or PyCharm
+.idea/
+
+#   OS-specific
+.DS_Store
+Thumbs.db

@@ -1,6 +1,6 @@
 import sqlite3
 
-def init_db(db_name="articole.db"):
+def initDB(db_name="articole.db"):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute('''
@@ -14,7 +14,7 @@ def init_db(db_name="articole.db"):
     conn.commit()
     conn.close()
 
-def save_articles_to_db(articles, db_name="articole.db"):
+def saveArticlesToDB(articles, db_name="articole.db"):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
@@ -30,3 +30,14 @@ def save_articles_to_db(articles, db_name="articole.db"):
     conn.commit()
     conn.close()
     print(f"Am salvat articolele in baza de date {db_name}")
+
+
+def get_all_articles(db_name="articole.db"):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT title, datetime, tag FROM articole ORDER BY id ASC")
+    rows = cursor.fetchall()
+    conn.close()
+
+    # Transforming into dictionaries list
+    return [{"title": r[0], "datetime": r[1], "tag": r[2]} for r in rows]

@@ -1,5 +1,11 @@
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
+import hashlib
 from bs4 import BeautifulSoup
+
+# Function for Hash Logic
+def hash_logic(title, datetime, tag):
+    key = f"{title.strip()}|{datetime.strip()}|{tag.strip()}"
+    return hashlib.md5(key.encode("utf-8")).hexdigest()
 
 # Open url using playwright
 def fetchingHTML(url):
@@ -25,6 +31,7 @@ def parseHomepage(html):
 
     soup = BeautifulSoup(html, 'html.parser')
     articles_data = []
+    seen_hashes = set()
 
     containers = soup.select("article.post")
 
@@ -36,12 +43,13 @@ def parseHomepage(html):
             title = title_tag.get_text(strip=True) if title_tag else None
 
             date_tag = article.find('time', class_='entry-date published')
-            date_time = date_tag.get_text(strip=True) if date_tag else "N/A"
+            date_time = date_tag['datetime'] if date_tag and 'datetime' in date_tag.attrs else "N/A"
 
             tag_tag = article.find('div', class_='hn-category-tag')
             tag = tag_tag.get_text(strip=True) if tag_tag else "N/A"
 
             if title:
+                article_hash = hash_logic(title,date_time,tag)
                 articles_data.append({
                     "title": title,
                     "datetime": date_time,
