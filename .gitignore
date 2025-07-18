@@ -15,3 +15,11 @@ __pycache__/
 #   OS-specific
 .DS_Store
 Thumbs.db
+
+#   Docker-specific
+*.log
+*.pid
+*.tar
+*.sock
+docker-compose.override.yml
+.env.docker
