@@ -73,4 +73,4 @@ This project was built as a learning exercise in Python web scraping, drawing on
 
 ## License
 
-Not specified yet.
+This project is licensed under the [MIT License](LICENSE).
